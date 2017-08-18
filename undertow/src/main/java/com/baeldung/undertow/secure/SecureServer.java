@@ -1,10 +1,5 @@
 package com.baeldung.undertow.secure;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import io.undertow.Undertow;
 import io.undertow.io.IoCallback;
 import io.undertow.security.api.AuthenticationMechanism;
@@ -17,7 +12,11 @@ import io.undertow.security.handlers.SecurityInitialHandler;
 import io.undertow.security.idm.IdentityManager;
 import io.undertow.security.impl.BasicAuthenticationMechanism;
 import io.undertow.server.HttpHandler;
-import io.undertow.server.HttpServerExchange;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SecureServer {
 
@@ -31,7 +30,7 @@ public class SecureServer {
         Undertow server = Undertow.builder().addHttpListener(8080, "localhost").setHandler(addSecurity((exchange) -> {
             final SecurityContext context = exchange.getSecurityContext();
             exchange.getResponseSender().send("Hello " + context.getAuthenticatedAccount().getPrincipal().getName(),
-                    IoCallback.END_EXCHANGE);
+              IoCallback.END_EXCHANGE);
         }, idm)).build();
 
         server.start();
@@ -43,7 +42,7 @@ public class SecureServer {
         handler = new AuthenticationCallHandler(handler);
         handler = new AuthenticationConstraintHandler(handler);
         final List<AuthenticationMechanism> mechanisms = Collections
-                .<AuthenticationMechanism> singletonList(new BasicAuthenticationMechanism("Baeldung_Realm"));
+          .singletonList(new BasicAuthenticationMechanism("Baeldung_Realm"));
         handler = new AuthenticationMechanismsHandler(handler, mechanisms);
         handler = new SecurityInitialHandler(AuthenticationMode.PRO_ACTIVE, identityManager, handler);
         return handler;
